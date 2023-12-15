@@ -1,7 +1,5 @@
 #include "Byml.h"
 
-using byte = unsigned char;
-
 /* --- Node --- */
 BymlFile::Node::Node(BymlFile::Type Type, std::string Key) : m_Type(Type), m_Key(Key)
 {
@@ -456,7 +454,7 @@ void BymlFile::WriteNode(BinaryVectorWriter& Writer, uint32_t DataOffset, uint32
     }
 }
 
-std::vector<byte> BymlFile::ToBinary(BymlFile::TableGeneration TableGeneration)
+std::vector<unsigned char> BymlFile::ToBinary(BymlFile::TableGeneration TableGeneration)
 {
     BinaryVectorWriter Writer;
 
@@ -546,7 +544,7 @@ std::vector<byte> BymlFile::ToBinary(BymlFile::TableGeneration TableGeneration)
         Writer.WriteInteger(StringOffset, sizeof(uint32_t));
     }
 
-    std::vector<byte> Data = Writer.GetData();
+    std::vector<unsigned char> Data = Writer.GetData();
     Data.resize(Data.size() - 1);
 
     return Data;
@@ -555,13 +553,13 @@ std::vector<byte> BymlFile::ToBinary(BymlFile::TableGeneration TableGeneration)
 void BymlFile::WriteToFile(std::string Path, BymlFile::TableGeneration TableGeneration)
 {
     std::ofstream File(Path, std::ios::binary);
-    std::vector<byte> Binary = this->ToBinary(TableGeneration);
+    std::vector<unsigned char> Binary = this->ToBinary(TableGeneration);
     std::copy(Binary.cbegin(), Binary.cend(),
         std::ostream_iterator<unsigned char>(File));
     File.close();
 }
 
-BymlFile::BymlFile(std::vector<byte>& Bytes)
+BymlFile::BymlFile(std::vector<unsigned char>& Bytes)
 {
     BinaryVectorReader Reader(Bytes);
 
@@ -623,7 +621,7 @@ BymlFile::BymlFile(std::string Path)
         File.seekg(0, std::ios_base::end);
         std::streampos FileSize = File.tellg();
 
-        std::vector<byte> Bytes(FileSize);
+        std::vector<unsigned char> Bytes(FileSize);
 
         File.seekg(0, std::ios_base::beg);
         File.read(reinterpret_cast<char*>(Bytes.data()), FileSize);

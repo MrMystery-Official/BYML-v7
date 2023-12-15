@@ -12,10 +12,7 @@
 class BymlFile
 {
 public:
-
-    using byte = unsigned char;
-
-	enum class Type : byte
+	enum class Type : unsigned char
 	{
         StringIndex = 0xa0,
         Array = 0xc0,
@@ -31,7 +28,7 @@ public:
         Null = 0xff
 	};
 
-    enum class TableGeneration : byte
+    enum class TableGeneration : unsigned char
     {
         Auto = 0,
         Manual = 1
@@ -55,13 +52,13 @@ public:
     private:
         BymlFile::Type m_Type;
         std::string m_Key;
-        std::vector<byte> m_Value;
+        std::vector<unsigned char> m_Value;
 
         std::vector<BymlFile::Node> m_Children;
 	};
 
 	BymlFile(std::string Path);
-	BymlFile(std::vector<byte>& Bytes);
+	BymlFile(std::vector<unsigned char>& Bytes);
 
     std::vector<BymlFile::Node>& GetNodes();
     BymlFile::Type& GetType();
@@ -73,7 +70,7 @@ public:
     void GenerateHashKeyTable(BymlFile::Node* Node);
     void GenerateStringTable(BymlFile::Node* Node);
 
-    std::vector<byte> ToBinary(BymlFile::TableGeneration TableGeneration);
+    std::vector<unsigned char> ToBinary(BymlFile::TableGeneration TableGeneration);
     void WriteToFile(std::string Path, BymlFile::TableGeneration TableGeneration);
 private:
     std::vector<BymlFile::Node> m_Nodes;
